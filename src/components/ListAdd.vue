@@ -100,7 +100,7 @@ export default {
 
 
 <style scoped>
-   *{ box-sizing: border-box; margin: 0; padding: 0;;}
+   *{ box-sizing: border-box; margin: 0; padding: 0; word-break: break-all;}
     html, body {width: 100%; height: 100%;}
     ol, ul {list-style: none;}
     ul {display: flex; flex-wrap: wrap;}
