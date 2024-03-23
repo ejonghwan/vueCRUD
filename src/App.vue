@@ -1,46 +1,31 @@
 
 
 <template>
-  <div class="hoho">
-    asdasd
-  </div>
-  <input type="text" ref="inp">
-  <!-- <HelloWorld msg="Vite + Vue" /> -->
+
+  부모컴포 
+  <Evt @send-evt="parentEvt"/>
+
+  {{ hoho }}
+
 </template>
 
 
-<script setup>
-// import HelloWorld from './components/HelloWorld.vue'
-import { ref, onBeforeMount, onMounted, onUpdated, onUnmounted } from 'vue';
+<script setup lang="ts">
 
-const inp = ref(null)
-
-onBeforeMount(() => {
-  console.log('onBeforeMount')
-})
-
-onMounted(() => {
-  document.querySelector('.hoho').style.border = '1px solid red';
-  console.log('inp ref??', inp.value)
-  console.log('onMounted')
-
-})
+import { ref } from 'vue';
+import Evt from './Evt.vue';
 
 
+// let tt = ref<string>()
 
-onUpdated(() => {
-  document.querySelector('.hoho').style.border = '1px solid blue';
-  // console.log('onUpdated')
-  alert('updated?')
-})
+const parentEvt = (evt: string):string => {
+  console.log(evt)
+  return evt;
+}
 
+const hoho = ref(parentEvt());
 
-onUnmounted(() => {
-  document.querySelector('.hoho').style.border = '1px solid yellow';
-  console.log('onUnmounted')
-  alert('unmounted')
-})
-
+console.log('hoho??', hoho.value)
 
 </script>
 
