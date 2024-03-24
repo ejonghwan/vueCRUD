@@ -1,35 +1,23 @@
-
-
-<template>
-
-  부모컴포 
-  <Evt @send-evt="parentEvt"/>
-
-  {{ hoho }}
-
-</template>
-
-
 <script setup lang="ts">
 
-import { ref } from 'vue';
-import Evt from './Evt.vue';
-
-
-// let tt = ref<string>()
-
-const parentEvt = (evt: string):string => {
-  console.log(evt)
-  return evt;
-}
-
-const hoho = ref(parentEvt());
-
-console.log('hoho??', hoho.value)
 
 </script>
 
+<template>
+  <RouterView />
+</template>
 
-<style scoped>
+<style>
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%; 
+  height: 100%;
+}
 
+#app {
+  width: 100%;
+  height: 100%;
+}
 </style>
