@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs } from "vue";
+import { reactive, toRefs } from "vue";
 
 
     interface Info {
@@ -40,7 +40,7 @@ import { toRefs } from "vue";
         console.log('click?', idx)
     }
 
-
+    
 
     // interface Button {
     //     icon: string;
@@ -54,6 +54,18 @@ import { toRefs } from "vue";
     // const props = defineProps<Props>()
     // const { data } = toRefs(props)
 
+
+    const childData = reactive([
+        { name: 'zz1', age: 30 },
+        { name: 'zz2', age: 31 },
+    ])
+
+    const emit = defineEmits([ 'send-evt' ])
+    const callfn = () => {
+        emit('send-evt', childData)
+    }
+
+    callfn();
 
 
 </script>
