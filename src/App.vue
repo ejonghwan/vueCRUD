@@ -1,10 +1,16 @@
 <script setup lang="ts">
 
+import List from './test/List.vue'
 
 </script>
 
 <template>
+
+  <List />
   <RouterView />
+
+  
+
 </template>
 
 <style>

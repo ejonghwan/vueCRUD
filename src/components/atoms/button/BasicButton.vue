@@ -22,6 +22,7 @@ const props = defineProps<Props>()
 const { data } = toRefs(props)
 
 
+
 </script>
 
 <style lang="scss" scoped>
