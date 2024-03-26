@@ -65,6 +65,28 @@
     <!-- <ListChild /> -->
 
 
+    <!-- class 조건부 렌더링  -->
+    <!-- <div v-if="data.userSkill === 'senior'" class="list_item__chip senior">{{ data.userSkill }}</div> -->
+    <!-- <div v-if="data.userSkill === 'junior'" class="list_item__chip junior">{{ data.userSkill }}</div> -->
+
+    <!-- style 조건부 렌더링 %를 이렇게 처리하면 개편할듯-->
+    <!-- <div v-if="data > 80" class="gauge" :style="{ width: data + '%' }">{{ data }}%</div> -->
+    <!-- <div v-else class="gauge" :style="{ width: data + '%', backgroundColor: 'red' }">{{ data }}%</div> -->
+
+
+
+    <!-- var은 ref -->
+    <!-- obj는 reactive -->
+    <!-- fn은 computed -->
+    <!-- dom은 ref 
+        <p ref="pTag">
+        const pTag = ref() 
+    -->
+
+    <!-- watch 페이지네이션 강의 다시 보기 -->
+
+
+
 </template>
 
 <script setup lang="ts">
@@ -137,9 +159,17 @@
     // const doubleValue = computed(() => store.doubleCount)
 
 
-
-  
-    const dd = [
+    interface ListDDINfo {
+        address: string;
+        zz?: string;
+    }
+    interface ListDD {
+        id: number, 
+        name: string, 
+        age: number, 
+        info: ListDDINfo
+    }
+    const dd: ListDD[] = [
         { id: 0, name: 'a1', age: 21, info: { address: 'busan1', zz: 'hoho' } },
         { id: 1, name: 'a2', age: 22, info: { address: 'busan2', zz: 'hoho' } },
         { id: 2, name: 'a3', age: 23, info: { address: 'busan3', zz: 'hoho' } },
@@ -189,7 +219,7 @@
     // }
 
     // 반응성 테스트..불변성과 깊은복사 옅은복사 테스트.  reactive / ref.. ref는 수정가능하지만 리액티브는 데이터 들어오면 수정불가
-    const react = reactive([
+    const react = reactive<ListDD[]>([
         { id: 0, name: 'a1', age: 21, info: { address: 'busan1', zz: 'hoho' } },
         { id: 1, name: 'a2', age: 22, info: { address: 'busan2', zz: 'hoho' } },
         { id: 2, name: 'a3', age: 23, info: { address: 'busan3', zz: 'hoho' } },
@@ -201,7 +231,7 @@
     ])
 
 
-    const getDD:object = ref([])
+    const getDD = ref<object[]>([])
     async function getData():Promise<object> {
         const pjson = await axios.get('https://jsonplaceholder.typicode.com/users/')
         const da = pjson.data;
