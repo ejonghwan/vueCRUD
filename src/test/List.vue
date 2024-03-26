@@ -1,6 +1,44 @@
 <template>
-    
 
+    <h3>v-show v-if test</h3> 
+    <div>
+        boolean?
+        <span v-show="ishoho">true</span>
+        <span v-show="!ishoho">false</span>
+    </div>
+    <div v-if="ishoho">is hoho 참</div>
+    <div v-else>is hoho 거짓</div>
+    <button type="button" @click="hohoToggle">toggle</button>
+
+    <br /><br />
+    
+    <h3>v-show v-if test</h3> 
+    <div> nnn? {{ nnn }}</div>
+    <div v-if="nnn === 5">5임</div>
+    <div v-else-if="nnn === 6">6임</div>
+    <div v-else-if="nnn === 7">7임</div>
+    <div v-else>5,6,7 다 아님</div>
+    <button type="button" @click="nnninc">dddinc</button>
+    <button type="button" @click="nnndec">ddddec</button>
+
+    <br /><br />
+
+    <h3>스토어 테스트 - count</h3>    
+    <div>name? {{ name }}</div>
+    <div>count? {{ count }}</div>
+    <div>doubleCount? {{ doubleCount }}</div>
+    <button type="button" @click="inc">count++</button>
+    <button type="button" @click="resetNumber">reset</button>
+
+    <br /><br />
+
+    <h3>스토어 테스트 - user</h3>    
+    <div class="loadingbar" :class="{ active: isLoading }">로딩중!!!!!!!!!!</div>
+    <button type="button" @click="gtuser">유저 불러오기</button>
+    <ul>
+        <li v-for="u in user" :key="u.title">{{ u.title }}</li>
+    </ul>
+    <br /><br />
 
     <h3>반응성 테스트 1 - ref 일반 변수로 하면 반응 x </h3>
     <div>count: {{ count }}</div>
@@ -30,11 +68,75 @@
 </template>
 
 <script setup lang="ts">
-    import { ref, onBeforeMount, reactive } from 'vue';
+    import { ref, onBeforeMount, reactive, computed, onUpdated } from 'vue';
     import ListChild from './ListChild.vue';
     import axios from 'axios'
 
     // console.log(ListChild) //필수값이 뭔지 찍힘
+
+    // v-show v-if test 
+    const ishoho = ref<boolean>(false)
+
+    function hohoToggle() {
+        ishoho.value = !ishoho.value
+        console.log(ishoho.value)
+    }
+    
+    const nnn = ref<number>(0)
+    function nnninc() {
+        nnn.value++
+    }
+    function nnndec() {
+        nnn.value--
+    }
+
+    // ########################################################################  피니아 스토어 사용
+    import { useCounterStore } from '../store/testStore'
+    import { storeToRefs } from 'pinia'
+    const store = useCounterStore();
+    // ❌ 반응성을 깨뜨리기 때문에 작동하지 않습니다.
+    // `props`에서 디스트럭처링하는 것과 동일합니다.
+    // const { name, doubleCount, count } = store;
+    // console.log('name???', name) // 언제나 "Eduardo"
+    // console.log('dbcount???', doubleCount) // 언제나 0
+    
+    const { name, doubleCount, count, increment, reset } = storeToRefs(store) // 반응성 유지하려면 이렇게
+    
+    
+    function inc() {
+        store.increment()
+        console.log(count)
+    }
+
+    function resetNumber() {
+        store.reset();
+    }
+    
+    
+    // ########################################################################  피니아 스토어 데이터 사용 
+    import { useUserStore } from '../store/userStore'
+    const userStore = useUserStore();
+    const { isLoading, user } = storeToRefs(userStore)
+    const { getUser } = userStore; 
+    
+
+    function gtuser():void {
+        getUser()
+        console.log('get user?', isLoading.value, user.value)
+    }
+
+
+
+
+    // setTimeout(() => {
+    //     store.increment()
+    // }, 1000)
+
+    // ✅ 이것은 반응적일 것입니다
+    // 💡 또한 `store.doubleCount`로 직접 사용할 수도 있습니다.
+    // const doubleValue = computed(() => store.doubleCount)
+
+
 
   
     const dd = [
@@ -75,16 +177,16 @@
 
     // 반응성 테스트 1
     // const count = ref(0)
-    let count = 0; // 반응성 없는걸로 하면 업데이트가 안됨. 그냥 useRef + useState 합쳐져있는거네 
+    // let count = 0; // 반응성 없는걸로 하면 업데이트가 안됨. 그냥 useRef + useState 합쳐져있는거네 
 
-    function handleInc() {
-        // count.value++
-        count++
-    }
-    function handleDec() {
-        // count.value--
-        count--
-    }
+    // function handleInc() {
+    //     // count.value++
+    //     count++
+    // }
+    // function handleDec() {
+    //     // count.value--
+    //     count--
+    // }
 
     // 반응성 테스트..불변성과 깊은복사 옅은복사 테스트.  reactive / ref.. ref는 수정가능하지만 리액티브는 데이터 들어오면 수정불가
     const react = reactive([
@@ -104,7 +206,7 @@
         const pjson = await axios.get('https://jsonplaceholder.typicode.com/users/')
         const da = pjson.data;
 
-        console.log(getDD)
+        // console.log(getDD)
 
         getDD.value = da;
         return da;
@@ -119,13 +221,21 @@
     // emit 
     const childDD = reactive([])
     const fn = (a:object) => {
-        console.log('a?', a[0].name)
+        // console.log('a?', a[0].name)
         // 이거 테스트 
         // childDD = a;
         // console.log(childDD)
     }
 
+
+
+
 </script>
 
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+
+    .loadingbar {border: 1px solid red; display: none;}
+    .loadingbar.active {background-color: red; color: #fff; display: block}
+
+</style>
