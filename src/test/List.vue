@@ -65,6 +65,8 @@
     <button type="button" @click="handleDec">dec</button>
 
 
+
+
     <h3>반응성 테스트2 - reative 불변성 테스트 </h3>
     <strong>일반 객체 - 클릭 해도 변경 x </strong>
     <div v-for="test in dd" :key="test.name" @click="test.age++" style="cursor: pointer; border: 1px solid #ddd;">{{ test.age }}</div>
