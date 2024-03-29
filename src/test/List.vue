@@ -1,5 +1,13 @@
 <template>
 
+    <!-- <h3>스토어 테스트 state 함수</h3> 
+    <div>a??? {{ testState }}</div>
+    <div>b??? {{ testState2 }}</div>
+    <button type="button" @click="stateAdd">store change</button> -->
+
+    <!-- <br /><br /> -->
+
+
     <h3>v-show v-if test</h3> 
     <div>
         boolean?
@@ -32,11 +40,22 @@
 
     <br /><br />
 
-    <h3>스토어 테스트 - user</h3>    
+    <h3>스토어 테스트 - post</h3>    
+
+    <div>
+        title - <input type="text" name="title" :value="objs.title" @input="handleChange"/>
+        content - <input type="text" name="body" :value="objs.body" @input="handleChange"/>
+        {{ objs.title }}{{ objs.body }}
+    </div>
+
     <div class="loadingbar" :class="{ active: isLoading }">로딩중!!!!!!!!!!</div>
-    <button type="button" @click="gtuser">유저 불러오기</button>
+    <button type="button" @click="allppp">all post 불러오기</button>
+    <button type="button" @click="gtuser">post 불러오기</button>
+    <button type="button" @click="postupd">post 업데이트</button>
     <ul>
-        <li v-for="u in user" :key="u.title">{{ u.title }}</li>
+        <li v-for="u in post" :key="u.title">
+            <div>{{ u.id }} - {{ u.title }}</div>
+        </li>
     </ul>
     <br /><br />
 
@@ -65,6 +84,10 @@
     <!-- <ListChild /> -->
 
 
+
+
+    <!-- 팁!!! -->
+
     <!-- class 조건부 렌더링  -->
     <!-- <div v-if="data.userSkill === 'senior'" class="list_item__chip senior">{{ data.userSkill }}</div> -->
     <!-- <div v-if="data.userSkill === 'junior'" class="list_item__chip junior">{{ data.userSkill }}</div> -->
@@ -85,12 +108,21 @@
 
     <!-- watch 페이지네이션 강의 다시 보기 -->
 
+    <!-- 하나의 watch로 스토어 하나 감시 가능 -->
+    <!-- watch(
+        pinia.state,
+        (state) => {
+            // 변경될 때마다 전체 상태를 로컬 스토리지에 유지
+            localStorage.setItem('piniaState', JSON.stringify(state))
+        },
+        { deep: true }
+    ) -->
 
 
 </template>
 
 <script setup lang="ts">
-    import { ref, onBeforeMount, reactive, computed, onUpdated } from 'vue';
+    import { ref, onBeforeMount, reactive, computed, onUpdated, onMounted } from 'vue';
     import ListChild from './ListChild.vue';
     import axios from 'axios'
 
@@ -111,6 +143,17 @@
     function nnndec() {
         nnn.value--
     }
+
+    
+
+
+    // ######################################################### 피니아 오브젝트형 
+    import { useObjStore } from '../store/objStore.ts'
+    const objStore = useObjStore();
+    // const { userList, user } = storeToRefs(objStore)
+    
+    console.log('uu?', objStore.userList)
+
 
     // ########################################################################  피니아 스토어 사용
     import { useCounterStore } from '../store/testStore'
@@ -133,22 +176,80 @@
     function resetNumber() {
         store.reset();
     }
+
     
     
     // ########################################################################  피니아 스토어 데이터 사용 
     import { useUserStore } from '../store/userStore'
     const userStore = useUserStore();
-    const { isLoading, user } = storeToRefs(userStore)
-    const { getUser } = userStore; 
+    const { isLoading, post, pageNum } = storeToRefs(userStore)
+    const { getPost, updatePost, allPost } = userStore; 
     
 
+    console.log('?????', pageNum.value)
+
+    function allppp() {
+        allPost()
+    }
+
     function gtuser():void {
-        getUser()
-        console.log('get user?', isLoading.value, user.value)
+        getPost()
+        // console.log('get user?', isLoading, post)
+    }
+
+    interface ReqData {
+        id: number;
+        userId: string;
+        title: string;
+        body: string;
+    }
+    let objs = ref<ReqData>({
+        id: 3,
+        userId: 'hoho',
+        title: '',
+        body: '',
+    })
+    function handleChange(e) {
+        objs.value = {
+            ...objs.value,
+            [e.target.name]: e.target.value,
+        }
+        console.log(objs.value)
+    }
+
+    function postupd() {
+        updatePost({ 
+            id: objs.value.id, 
+            userId: objs.value.userId, 
+            title: objs.value.title, 
+            body: objs.value.body 
+        })
     }
 
 
+    // onMounted(() => {
+    //     const s = state();
+    //     console.log('mounted??', s)
+    // })
 
+    // function stateAdd() {
+    //     // const s = state();
+    //     // s.testState++;
+    //     // s.testState2 = 'change state'
+    //     // console.log('s??', s)
+    //     // return { a: s.testState, b:  s.testState2 }
+
+       
+    //     userStore.$patch(state => { 
+    //         // testState: userStore.testState++,
+    //         // testState2: '변경 됐음'
+    //         console.log('state?', state)
+    //     })
+    //     // console.log('피니아 상태 ? ', userStore)
+    // }
+    // // const { a, b } = stateAdd()
+
+    
 
     // setTimeout(() => {
     //     store.increment()
@@ -194,12 +295,6 @@
     //     { icon: 'Structure', label: 'Structure' },
     //     { icon: 'Settings', label: 'Settings' },
     // ]
-
-
-
-
-
-    
 
 
 

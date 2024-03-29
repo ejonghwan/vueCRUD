@@ -6,8 +6,11 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
 
+    
+
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    // "moduleResolution": "bundler",
+    "moduleResolution": "node", //이거 설정해줘야 타입스크립트 에러 안남
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
