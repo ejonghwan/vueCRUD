@@ -58,7 +58,7 @@
         </li>
     </ul>
     <br /><br />
-
+d
     <h3>반응성 테스트 1 - ref 일반 변수로 하면 반응 x </h3>
     <div>count: {{ count }}</div>
     <button type="button" @click="handleInc">inc</button>
