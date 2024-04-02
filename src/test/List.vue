@@ -1,4 +1,10 @@
 <template>
+    <!-- 페이지네이션 테스트 -->
+    <ul>
+        <li v-for="table in tableData" :key="table.userName">{{ table.userName }} - {{ table.userRole }}</li>
+    </ul>
+    <PAGENATION :totalPage="totalPage" @sendPage="resettt"/>
+
 
     <!-- <h3>스토어 테스트 state 함수</h3> 
     <div>a??? {{ testState }}</div>
@@ -124,8 +130,9 @@ d
 </template>
 
 <script setup lang="ts">
-    import { ref, onBeforeMount, reactive, computed, onUpdated, onMounted } from 'vue';
+    import { ref, onBeforeMount, reactive, computed, onUpdated, onMounted, watch } from 'vue';
     import ListChild from './ListChild.vue';
+    import PAGENATION from '@/pagenation/Pagenation.vue';
     import axios from 'axios'
 
     // console.log(ListChild) //필수값이 뭔지 찍힘
@@ -183,6 +190,7 @@ d
     
     // ########################################################################  피니아 스토어 데이터 사용 
     import { useUserStore } from '../store/userStore'
+
     const userStore = useUserStore();
     const { isLoading, post, pageNum } = storeToRefs(userStore)
     const { getPost, updatePost, allPost } = userStore; 
@@ -355,7 +363,79 @@ d
     }
 
 
+    interface List {
+        userName: string,
+        userRole: string,
+    }
+    // 페이지 네이션
+    const tableData = ref<List[]>([])
+    const selectedPage = ref<number>(1) //0페이지라는 UI는 없으니 초기값 1로 셋팅
+    const totalPage = ref<number>(0) // tableData의 개수에 따라 페이지네이션 UI에 그려지는 숫자 리스트 
+    const totalCount = ref<number | undefined>() 
+    const limit = ref<number>(10) //테이블 유아이에 보여지는 데이터개수
 
+    const getDataaa = () => {
+        tableData.value = [
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho2', userRole: "zpzp1"},
+            {userName: 'hoho3', userRole: "zpzp1"},
+            {userName: 'hoho4', userRole: "zpzp1"},
+            {userName: 'hoho5', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+            {userName: 'hoho1', userRole: "zpzp1"},
+        ]
+
+        totalCount.value = tableData.value !== undefined ? tableData.value.length : 0;
+        totalPage.value = Math.ceil(totalCount.value / limit.value) !== 0 ? Math.ceil(totalCount.value / limit.value) : 1 
+        // 22 / 2 = 2.2  === 2p   계산된 값이 0이 아니면 값을 그대로 .. 0이면 1을 
+
+        tableData.value = disassemble(selectedPage.value - 1, tableData.value, limit.value)
+    }
+    
+    const disassemble = (index: number, data: List[], size: number) => {
+        const res = new Array();
+        for(let i = 0; i < data.length; i += size) { //0 10 20 30 40 50  size가 리밋이니깐 10임
+            res.push(data.slice(i, i + size)) // 11개의 데이터가 있을 때 리밋이 10이므로 10개 1개 이렇게 짤라준거
+        }
+        console.log('res??', res)
+        return res[index]
+    }
+
+    const resettt = (pageIndex: number) => {
+        if(pageIndex === 0) selectedPage.value = 1;
+        else selectedPage.value = pageIndex
+    }
+
+    watch(selectedPage, () => {
+        // selectedPage가 변하는걸 감지하고 있다가 변했다면 다시 데이터함수 실행
+        getDataaa();
+    })
+    
+
+    onMounted(() => {
+        getDataaa();
+    })
 
 </script>
 
