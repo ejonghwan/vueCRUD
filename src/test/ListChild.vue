@@ -32,7 +32,7 @@ import { reactive, toRefs } from "vue";
 
     const props = defineProps<Props>()
     const { data } = toRefs(props)
-    // console.log(props)
+    console.log(props)
 
 
 
