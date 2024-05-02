@@ -354,13 +354,18 @@ d
 
 
     // emit 
+<<<<<<< HEAD
     const childDD = reactive([])
     const fn = (a: object) => {
+=======
+    // const childDD = reactive([])
+    // const fn = (a:object) => {
+>>>>>>> b091f4d3366b6b54c1fdd6419c11b760b7b189ff
         // console.log('a?', a[0].name)
         // 이거 테스트 
         // childDD = a;
         // console.log(childDD)
-    }
+    // }
 
 
     interface List {
