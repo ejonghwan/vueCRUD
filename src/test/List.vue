@@ -355,7 +355,7 @@ d
 
     // emit 
     const childDD = reactive([])
-    const fn = (a:object) => {
+    const fn = (a: object) => {
         // console.log('a?', a[0].name)
         // 이거 테스트 
         // childDD = a;
@@ -436,6 +436,15 @@ d
     onMounted(() => {
         getDataaa();
     })
+
+
+
+
+
+
+    // typescript test
+    
+
 
 </script>
 
