@@ -46,6 +46,7 @@ import { reactive, toRefs } from "vue";
 
 
     test1
+    test2
 
     // interface Button {
     //     icon: string;
